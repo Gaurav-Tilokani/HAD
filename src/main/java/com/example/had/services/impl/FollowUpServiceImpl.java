@@ -76,13 +76,12 @@ public class FollowUpServiceImpl implements FollowUpService {
         FollowUp followUp = this.followUpRepo.findById(followUpId).orElseThrow(()-> new ResourceNotFoundException("FollowUp","followUpId",followUpId));
         int fwInHospId = followUp.getFieldWorkerInHospital().getFwInHospId();
         FieldWorkerInHospital fieldWorkerInHospital = this.fieldWorkerInHospitalRepo.findById(fwInHospId).orElseThrow(()-> new ResourceNotFoundException("FollowUp","followUpId",followUpId));
-        int currNumOfTasksPerDay = fieldWorkerInHospital.getNumOfTasksPerDay();
+        int currNumOfTasksPerDay = fieldWorkerInHospital.getNumOfTasksAssignedPerDay();
         currNumOfTasksPerDay--;
-        fieldWorkerInHospital.setNumOfTasksPerDay(currNumOfTasksPerDay);
+        fieldWorkerInHospital.setNumOfTasksAssignedPerDay(currNumOfTasksPerDay);
         this.fieldWorkerInHospitalRepo.save(fieldWorkerInHospital);
         followUp.setReviewByFieldWorker(followUpDto.getReviewByFieldWorker());
         followUp.setIsActive(2);
-        followUp.setUrgentFlag(false);
         this.followUpRepo.save(followUp);
     }
 //
