@@ -1,10 +1,9 @@
 package com.example.had.services.impl;
 
-import com.example.had.entities.DoctorInHospital;
-import com.example.had.entities.FieldWorker;
-import com.example.had.entities.FieldWorkerInHospital;
-import com.example.had.entities.Hospital;
+import com.example.had.entities.*;
 import com.example.had.exceptions.ResourceNotFoundException;
+import com.example.had.payloads.DoctorDto;
+import com.example.had.payloads.FieldWorkerDto;
 import com.example.had.payloads.FieldWorkerInHospitalDto;
 import com.example.had.repositories.FieldWorkerInHospitalRepo;
 import com.example.had.repositories.FieldWorkerRepo;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,12 +49,13 @@ public class FieldWorkerInHospitalServiceImpl implements FieldWorkerInHospitalSe
         fieldWorkerInHospital.setFieldWorker(fieldWorker);
         fieldWorkerInHospital.setHospital(hospital);
         fieldWorkerInHospital.setNumOfTasksPerDay(fieldWorkerInHospitalDto.getNumOfTasksPerDay());
-        //fieldWorkerInHospital.setRegistrationDate(fieldWorkerInHospitalDto.getRegistrationDate());
-       // fieldWorkerInHospital.setFwInHosp(fieldWorkerInHospitalDto.getFwInHosp());
+
 
         FieldWorkerInHospital updatedFieldWorkerInHospital= this.fieldWorkerInHospitalRepo.save(fieldWorkerInHospital);
         return this.modelMapper.map(updatedFieldWorkerInHospital,  FieldWorkerInHospitalDto.class);
     }
+
+
 
     @Override
     public FieldWorkerInHospitalDto geFieldWorkerInHospitalById(Integer fwInHospId) {
@@ -62,6 +63,22 @@ public class FieldWorkerInHospitalServiceImpl implements FieldWorkerInHospitalSe
             return new ResourceNotFoundException("fieldWorkerInHospital", "fieldWorkerInHospitalId", fwInHospId);
         });
         return this.modelMapper.map(fieldWorkerInHospital, FieldWorkerInHospitalDto.class);
+    }
+
+
+    @Override
+    public List<FieldWorkerDto> getFieldWorkerInHospitalByHospId(Integer hospId)
+    {
+        Hospital hospital = this.hospitalRepo.findById(hospId).orElseThrow(()->new ResourceNotFoundException("Hospital","hospital id",hospId));;
+        List<FieldWorkerInHospital> fieldWorkers = this.fieldWorkerInHospitalRepo.findAllByHospital(hospital);
+        List<FieldWorker> fw=new ArrayList<>();
+        for(int i=0; i<fieldWorkers.size(); i++)
+        {
+            fw.add(fieldWorkers.get(i).getFieldWorker());
+        }
+
+        List<FieldWorkerDto> fieldWorkerDtos = fw.stream().map((fieldWorker -> this.modelMapper.map(fieldWorker, FieldWorkerDto.class))).collect(Collectors.toList());
+        return fieldWorkerDtos;
     }
 
     @Override
@@ -83,7 +100,7 @@ public class FieldWorkerInHospitalServiceImpl implements FieldWorkerInHospitalSe
     @Override
     public List<FieldWorkerInHospitalDto> getFieldWorker(Integer hospitalId) {
 
-//        Hospital hospital = this.hospitalRepo.findById(hospitalId).orElseThrow(() -> new ResourceNotFoundException("Hospital", "Hospital Id", hospitalId));
+
         List<FieldWorkerInHospital> fieldWorkerInHospitals= this.fieldWorkerInHospitalRepo.findAllByHospitalAAndNumOfTasksPerDay(hospitalId);
         List<FieldWorkerInHospitalDto> fieldWorkerInHospitalDtos = fieldWorkerInHospitals.stream().map(fieldWorkerInHospital -> this.modelMapper.map(fieldWorkerInHospital, FieldWorkerInHospitalDto.class)).collect(Collectors.toList());
         return fieldWorkerInHospitalDtos;

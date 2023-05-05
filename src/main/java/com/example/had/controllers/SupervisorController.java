@@ -20,6 +20,7 @@ public class SupervisorController {
     @Autowired
     SupervisorService supervisorService;
 
+
     @PostMapping("/")
     public ResponseEntity<SupervisorDto> createSupervisor(@RequestBody SupervisorDto supervisorDto) {
         SupervisorDto createSupervisorDto = this.supervisorService.createSupervisor(supervisorDto);
@@ -34,6 +35,13 @@ public class SupervisorController {
         SupervisorDto updatedSupervisor = this.supervisorService.updateSupervisor(supervisorDto,supervisorId);
         return ResponseEntity.ok(updatedSupervisor);
     }
+
+    @GetMapping("/hosp/{hospId}")
+    public ResponseEntity<List<SupervisorDto>> getAllSupervisorsByHospId(@PathVariable Integer hospId) {
+
+        return ResponseEntity.ok(this.supervisorService.getAllSupervisorsByHospId(hospId));
+    }
+
 
     @DeleteMapping("/{supervisorId}")
     public void deleteSupervisor(@PathVariable Integer supervisorId) {

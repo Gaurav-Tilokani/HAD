@@ -30,7 +30,8 @@ public class DoctorController {
     }
 
     @DeleteMapping("/{doctorId}")
-    public void deleteDoctor(@PathVariable Integer doctorId) {
+    public void deleteDoctor(@PathVariable Integer doctorId)
+    {
         this.doctorService.deleteDoctor(doctorId);
     }
 

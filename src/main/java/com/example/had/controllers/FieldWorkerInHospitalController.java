@@ -3,6 +3,7 @@ package com.example.had.controllers;
 import com.example.had.entities.FieldWorkerInHospital;
 import com.example.had.payloads.ApiResponse;
 import com.example.had.payloads.DoctorDto;
+import com.example.had.payloads.FieldWorkerDto;
 import com.example.had.payloads.FieldWorkerInHospitalDto;
 import com.example.had.services.DoctorService;
 import com.example.had.services.FieldWorkerInHospitalService;
@@ -30,6 +31,12 @@ public class FieldWorkerInHospitalController {
     public ResponseEntity<FieldWorkerInHospitalDto>getFieldWorkerInHospitalById(@PathVariable Integer fwInHospId) {
         return ResponseEntity.ok(this.fieldWorkerInHospitalService.geFieldWorkerInHospitalById(fwInHospId));
     }
+    @GetMapping("/hosp/{hospId}")
+    public ResponseEntity<List<FieldWorkerDto>> getFieldWorkerInHospitalByHospId(@PathVariable Integer hospId) {
+
+        return ResponseEntity.ok(this.fieldWorkerInHospitalService.getFieldWorkerInHospitalByHospId(hospId));
+    }
+
 
     @PostMapping("/fwInHosp/{fwInHosp}/hospital/{hospitalId}")
     //public registerFieldWorker(@PathVariable Integer fwInHosp,@PathVariable Integer hospitalId) ;

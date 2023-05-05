@@ -2,8 +2,10 @@ package com.example.had.services.impl;
 
 import com.example.had.entities.*;
 import com.example.had.exceptions.ResourceNotFoundException;
+import com.example.had.payloads.DoctorDto;
 import com.example.had.payloads.DoctorInHospitalDto;
 import com.example.had.payloads.FieldWorkerInHospitalDto;
+import com.example.had.payloads.VisitDto;
 import com.example.had.repositories.*;
 import com.example.had.services.DoctorInHospitalService;
 import org.modelmapper.ModelMapper;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,6 +59,23 @@ public class DoctorInHospitalServiceImpl implements DoctorInHospitalService{
         });
         return this.modelMapper.map(doctorInHospital, DoctorInHospitalDto.class);
     }
+
+    @Override
+    public List<DoctorDto> getDoctorInHospitalByHospId(Integer hospId)
+    {
+        Hospital hospital = this.hospitalRepo.findById(hospId).orElseThrow(()->new ResourceNotFoundException("Hospital","hospital id",hospId));;
+        List<DoctorInHospital> doctors = this.doctorInHospitalRepo.findAllByHospital(hospital);
+        List<Doctor> doc=new ArrayList<>();
+        for(int i=0; i<doctors.size(); i++)
+        {
+            doc.add(doctors.get(i).getDoctor());
+        }
+
+        List<DoctorDto> doctorDtos = doc.stream().map((doctor -> this.modelMapper.map(doctor, DoctorDto.class))).collect(Collectors.toList());
+        return doctorDtos;
+    }
+
+
 
     @Override
     public void registerDoctor(Integer docId, Integer hosId) {

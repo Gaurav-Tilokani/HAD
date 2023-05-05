@@ -1,6 +1,8 @@
 package com.example.had.controllers;
 
+import com.example.had.entities.DoctorInHospital;
 import com.example.had.payloads.ApiResponse;
+import com.example.had.payloads.DoctorDto;
 import com.example.had.payloads.DoctorInHospitalDto;
 import com.example.had.services.DoctorInHospitalService;
 import com.example.had.services.DoctorService;
@@ -12,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/doctorInHospital")
 @CrossOrigin(origins = "*")
@@ -32,6 +37,12 @@ public class DoctorInHospitalController {
     @GetMapping("/{docInHospId}")
     public ResponseEntity<DoctorInHospitalDto>getDoctorInHospitalById(@PathVariable Integer docInHospId) {
         return ResponseEntity.ok(this.doctorInHospitalService.getDoctorInHospitalById(docInHospId));
+    }
+
+    @GetMapping("/hosp/{hospId}")
+    public ResponseEntity<List<DoctorDto>> getDoctorInHospitalByHospId(@PathVariable Integer hospId) {
+
+        return ResponseEntity.ok(this.doctorInHospitalService.getDoctorInHospitalByHospId(hospId));
     }
 
 

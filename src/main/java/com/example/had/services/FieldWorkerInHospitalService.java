@@ -2,6 +2,7 @@ package com.example.had.services;
 
 import com.example.had.entities.FieldWorkerInHospital;
 import com.example.had.payloads.DoctorDto;
+import com.example.had.payloads.FieldWorkerDto;
 import com.example.had.payloads.FieldWorkerInHospitalDto;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface FieldWorkerInHospitalService {
 
     void registerFieldWorker(Integer fwId, Integer hosId);
     List<FieldWorkerInHospitalDto> getFieldWorker(Integer hospitalId);
-
+    List<FieldWorkerDto> getFieldWorkerInHospitalByHospId(Integer hospId);
     String getPhoneNo(Integer fwInHospId);
     void deleteFieldWorker(Integer fwId);
 

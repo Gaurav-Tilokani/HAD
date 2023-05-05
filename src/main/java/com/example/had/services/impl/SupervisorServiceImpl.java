@@ -9,10 +9,7 @@ package com.example.had.services.impl;
 
 import com.example.had.entities.*;
 import com.example.had.exceptions.ResourceNotFoundException;
-import com.example.had.payloads.FieldWorkerDto;
-import com.example.had.payloads.FieldWorkerInHospitalDto;
-import com.example.had.payloads.HospitalDto;
-import com.example.had.payloads.SupervisorDto;
+import com.example.had.payloads.*;
 import com.example.had.repositories.FieldWorkerInHospitalRepo;
 import com.example.had.repositories.FieldWorkerRepo;
 import com.example.had.repositories.HospitalRepo;
@@ -23,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -111,7 +109,16 @@ public class SupervisorServiceImpl implements SupervisorService {
         return phoneNo;
     }
 
+    @Override
+    public List<SupervisorDto> getAllSupervisorsByHospId(Integer hospId)
+    {
+        Hospital hospital = this.hospitalRepo.findById(hospId).orElseThrow(()->new ResourceNotFoundException("Hospital","hospital id",hospId));;
+        List<Supervisor> sup= this.supervisorRepo.findAllByHospital(hospital);
 
+
+        List<SupervisorDto> supervisorDtos = sup.stream().map((supervisor -> this.modelMapper.map(supervisor, SupervisorDto.class))).collect(Collectors.toList());
+        return supervisorDtos;
+    }
 
 
 }

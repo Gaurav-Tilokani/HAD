@@ -13,6 +13,7 @@ public interface SupervisorService {
     SupervisorDto updateSupervisor(SupervisorDto supervisorDto, Integer supervisorID);
     SupervisorDto getSupervisorById(Integer supervisorId);
     List<SupervisorDto> getAllSupervisors();
+    List<SupervisorDto>getAllSupervisorsByHospId(Integer hospId);
     void deleteSupervisor(Integer supervisorId);
     String getPhoneNo(Integer sId);
 
